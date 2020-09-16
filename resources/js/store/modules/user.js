@@ -12,6 +12,7 @@ const state = {
   introduction: '',
   roles: [],
   permissions: [],
+  phone: '',
 };
 
 const mutations = {
@@ -35,6 +36,9 @@ const mutations = {
   },
   SET_PERMISSIONS: (state, permissions) => {
     state.permissions = permissions;
+  },
+  SET_PHONE: (state, phone) => {
+    state.phone = phone;
   },
 };
 
@@ -66,12 +70,13 @@ const actions = {
             reject('Verification failed, please Login again.');
           }
 
-          const { roles, name, avatar, introduction, permissions, id } = data;
+          const { roles, name, avatar, introduction, permissions, id, phone } = data;
           // roles must be a non-empty array
           if (!roles || roles.length <= 0) {
             reject('getInfo: roles must be a non-null array!');
           }
 
+          commit('SET_PHONE', phone);
           commit('SET_ROLES', roles);
           commit('SET_PERMISSIONS', permissions);
           commit('SET_NAME', name);
@@ -130,7 +135,10 @@ const actions = {
       resetRouter();
 
       // generate accessible routes map based on roles
-      const accessRoutes = await store.dispatch('permission/generateRoutes', { roles, permissions });
+      const accessRoutes = await store.dispatch('permission/generateRoutes', {
+        roles,
+        permissions,
+      });
 
       // dynamically add accessible routes
       router.addRoutes(accessRoutes);

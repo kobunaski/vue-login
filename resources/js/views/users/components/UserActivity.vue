@@ -9,7 +9,7 @@
                 class="img-circle"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDkaQO69Fro8SZLTVZQ75JH2R0T-sn5yIA_lKGwvvgQ0R0BoQtUQ"
                 alt="user image"
-              >
+              />
               <span class="username text-muted">
                 <a href="#">Iron Man</a>
                 <a href="#" class="pull-right btn-box-tool">
@@ -51,7 +51,7 @@
                 class="img-circle"
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMMN-8f9CQQ3MKJpboBJIqaiJ2Wus2Tf4w_vx9STtalxrY3qGJ"
                 alt="user image"
-              >
+              />
               <span class="username text-muted">
                 <a href="#">Captain American</a>
                 <a href="#" class="pull-right btn-box-tool">
@@ -68,9 +68,7 @@
               to Charlie Sheen fans.
             </p>
             <el-input placeholder="Response">
-              <el-button slot="append">
-                Send
-              </el-button>
+              <el-button slot="append">Send</el-button>
             </el-input>
           </div>
           <div class="post">
@@ -79,7 +77,7 @@
                 class="img-circle img-bordered-sm"
                 src="https://cdn3.iconfinder.com/data/icons/movies-3/32/daredevil-superhero-marvel-comics-mutant-avatar-512.png"
                 alt="User Image"
-              >
+              />
               <span class="username">
                 <a href="#">Daredevil</a>
                 <a href="#" class="pull-right btn-box-tool">
@@ -91,7 +89,7 @@
             <div class="user-images">
               <el-carousel :interval="6000" type="card" height="200px">
                 <el-carousel-item v-for="item in carouselImages" :key="item">
-                  <img :src="item" class="image">
+                  <img :src="item" class="image" />
                 </el-carousel-item>
               </el-carousel>
             </div>
@@ -155,10 +153,11 @@
         <el-form-item label="Email">
           <el-input v-model="user.email" :disabled="user.role === 'admin'" />
         </el-form-item>
+        <el-form-item label="Phone">
+          <el-input v-model="user.phone" :disabled="user.role === 'admin'" />
+        </el-form-item>
         <el-form-item>
-          <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmit">
-            Update
-          </el-button>
+          <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmit">Update</el-button>
         </el-form-item>
       </el-tab-pane>
     </el-tabs>
@@ -177,6 +176,7 @@ export default {
         return {
           name: '',
           email: '',
+          phone: '',
           avatar: '',
           roles: [],
         };
@@ -203,7 +203,7 @@ export default {
       this.updating = true;
       userResource
         .update(this.user.id, this.user)
-        .then(response => {
+        .then((response) => {
           this.updating = false;
           this.$message({
             message: 'User information has been updated successfully',
@@ -211,7 +211,7 @@ export default {
             duration: 5 * 1000,
           });
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           this.updating = false;
         });
@@ -223,7 +223,8 @@ export default {
 <style lang="scss" scoped>
 .user-activity {
   .user-block {
-    .username, .description {
+    .username,
+    .description {
       display: block;
       margin-left: 50px;
       padding: 2px 0;
@@ -270,7 +271,8 @@ export default {
       font-size: 13px;
     }
     .link-black {
-      &:hover, &:focus {
+      &:hover,
+      &:focus {
         color: #999;
       }
     }
@@ -287,7 +289,7 @@ export default {
     background-color: #99a9bf;
   }
 
-  .el-carousel__item:nth-child(2n+1) {
+  .el-carousel__item:nth-child(2n + 1) {
     background-color: #d3dce6;
   }
 }

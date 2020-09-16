@@ -6,12 +6,22 @@
     <div class="user-education user-bio-section">
       <div class="user-bio-section-header">
         <svg-icon icon-class="education" />
+        <span>Phone number</span>
+      </div>
+      <div class="user-bio-section-body">
+        <div v-if="user.phone" class="text-muted">{{ user.phone }}</div>
+        <div v-else class="text-muted">No phone number</div>
+      </div>
+    </div>
+    <div class="user-education user-bio-section">
+      <div class="user-bio-section-header">
+        <svg-icon icon-class="education" />
         <span>Education</span>
       </div>
       <div class="user-bio-section-body">
-        <div class="text-muted">
-          B.S. in Computer Science from the University of Technology at Ho Chi Minh city
-        </div>
+        <div
+          class="text-muted"
+        >B.S. in Computer Science from the University of Technology at Ho Chi Minh city</div>
       </div>
     </div>
     <div class="user-skills user-bio-section">
@@ -43,6 +53,23 @@
 
 <script>
 export default {
+  props: {
+    user: {
+      type: Object,
+      default: () => {
+        return {
+          name: '',
+          email: '',
+          phone: '',
+          avatar: '',
+          roles: [],
+        };
+      },
+    },
+  },
+  mounted() {
+    console.log(this.user);
+  },
 };
 </script>
 

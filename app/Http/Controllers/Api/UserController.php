@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File UserController.php
  *
@@ -46,12 +47,15 @@ class UserController extends BaseController
         $keyword = Arr::get($searchParams, 'keyword', '');
 
         if (!empty($role)) {
-            $userQuery->whereHas('roles', function($q) use ($role) { $q->where('name', $role); });
+            $userQuery->whereHas('roles', function ($q) use ($role) {
+                $q->where('name', $role);
+            });
         }
 
         if (!empty($keyword)) {
             $userQuery->where('name', 'LIKE', '%' . $keyword . '%');
             $userQuery->where('email', 'LIKE', '%' . $keyword . '%');
+            $userQuery->where('phone', 'LIKE', '%' . $keyword . '%');
         }
 
         return UserResource::collection($userQuery->paginate($limit));
@@ -83,6 +87,7 @@ class UserController extends BaseController
             $user = User::create([
                 'name' => $params['name'],
                 'email' => $params['email'],
+                'phone' => $params['phone'],
                 'password' => Hash::make($params['password']),
             ]);
             $role = Role::findByName($params['role']);
@@ -120,7 +125,8 @@ class UserController extends BaseController
         }
 
         $currentUser = Auth::user();
-        if (!$currentUser->isAdmin()
+        if (
+            !$currentUser->isAdmin()
             && $currentUser->id !== $user->id
             && !$currentUser->hasPermission(\App\Laravue\Acl::PERMISSION_USER_MANAGE)
         ) {
@@ -137,8 +143,15 @@ class UserController extends BaseController
                 return response()->json(['error' => 'Email has been taken'], 403);
             }
 
+            $phone = $request->get('phone');
+            $foundPhone = User::where('phone', $phone)->first();
+            if ($foundPhone && $foundPhone->id !== $user->id) {
+                return response()->json(['error' => 'Phone has been taken'], 403);
+            }
+
             $user->name = $request->get('name');
             $user->email = $email;
+            $user->phone = $phone;
             $user->save();
             return new UserResource($user);
         }
@@ -163,7 +176,7 @@ class UserController extends BaseController
 
         $permissionIds = $request->get('permissions', []);
         $rolePermissionIds = array_map(
-            function($permission) {
+            function ($permission) {
                 return $permission['id'];
             },
 
@@ -224,6 +237,7 @@ class UserController extends BaseController
         return [
             'name' => 'required',
             'email' => $isNew ? 'required|email|unique:users' : 'required|email',
+            'phone' => $isNew ? 'required|unique:users' : 'required|max:10',
             'roles' => [
                 'required',
                 'array'

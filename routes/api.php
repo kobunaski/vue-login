@@ -124,7 +124,6 @@ Route::get('articles/{id}', function ($id) {
         'reviewer' => Faker::randomString(mt_rand(5, 10)),
         'timestamp' => Faker::randomDateTime()->getTimestamp(),
         'type' => Faker::randomInArray(['US', 'VI', 'JA']),
-
     ];
 
     return response()->json(new JsonResponse($article));
